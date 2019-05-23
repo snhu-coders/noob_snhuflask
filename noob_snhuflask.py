@@ -7,7 +7,6 @@ Be warned.  I have no idea what I'm doing.
 
 # Import some stuff here.
 
-
 import sys
 import yaml
 from flask import Flask, jsonify
