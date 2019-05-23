@@ -5,11 +5,13 @@ RESTful API to supplement the functions of Noob SNHUbot.
 Be warned.  I have no idea what I'm doing.
 """
 
-# Import some stuff here.
+### Import some stuff here.
 
 import sys
 import yaml
+import slack
 from flask import Flask, jsonify
+from slackeventsapi import SlackEventAdapter
 
 # First things first, load the config:
 
@@ -29,11 +31,24 @@ except FileNotFoundError as err:
     print("Could not load config file.  Exiting.")
     sys.exit()
 
-app = Flask(__name__)
+### Globals
 
-@app.route("/")
-def hello():
-    return "Hello World!!!\n"
+app = Flask(__name__)
+slack_client = slack.WebClient(FLASK_CONFIG["token"])
+slack_events_adapter = SlackEventAdapter(FLASK_CONFIG["sign-secret"], "/slack/events")
+
+### Function Definitions
+
+# Example responder to greetings
+@slack_events_adapter.on("message")
+def handle_message(event_data):
+    message = event_data["event"]
+    print(message)
+
+# Print out errors if they occur
+@slack_events_adapter.on("error")
+def show_error(err):
+    print("ERROR: " + str(err))
 
 if __name__ == "__main__":
-    app.run()
+    slack_events_adapter.start(port=3000)
