@@ -16,7 +16,7 @@ multidict==4.5.2
 pycares==3.0.0
 pycparser==2.19
 pyee==6.0.0
-PyYAML==5.1
+PyYAML==5.4
 requests==2.22.0
 six==1.12.0
 slackclient==2.0.1
